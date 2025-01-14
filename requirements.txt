@@ -1,0 +1,12 @@
+numpy
+pandas
+matplotlib
+torch
+torchvision
+stable-baselines3
+kubernetes
+gym
+tensorflow
+prometheus-client
+google-cloud-sdk
+pytest
