@@ -22,7 +22,7 @@ cd dynamic-resource-scaling
 sudo apt-get update
 sudo apt-get install python3.8 python3-pip -y
 sudo apt-get install virtualenv -y
-virtualenv venv
+virtualenv -p python3.8 venv
 source venv/bin/activate
 pip install -r requirements.txt
 
