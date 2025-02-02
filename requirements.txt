@@ -10,3 +10,10 @@ tensorflow
 prometheus-client
 google-cloud-sdk
 pytest
+horovod
+matplotlib
+scikit-learn
+ray[rllib]
+prometheus-api-client
+google-cloud-bigquery
+google-cloud-storage
