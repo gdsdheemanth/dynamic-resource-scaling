@@ -13,4 +13,4 @@ gcloud container clusters get-credentials "ml-cluster" --zone=us-central1-a
 
 # Create Namespaces
 kubectl apply -f config/k8s_config.yaml
-
+# kubectl apply -f config/rbac.yaml

@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: horovod-training
+  namespace: training
+spec:
+  completions: 1
+  template:
+    spec:
+      containers:
+      - command:
+        - horovodrun
+        - -np
+        - '1'
+        - -H
+        - localhost:1
+        - python
+        - /app/train.py
+        image: gcr.io/dra-dml/horovod-training:v1
+        name: horovod-worker
+        resources:
+          limits:
+            cpu: '1'
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /app/model_output
+          name: model-storage
+      restartPolicy: Never
+      volumes:
+      - emptyDir: {}
+        name: model-storage

@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{job_name}}
+  namespace: training
+spec:
+  completions: 1
+  parallelism: 2
+  template:
+    spec:
+      containers:
+      - name: ray-worker
+        image: gcr.io/dra-dml/ray-training:v1
+        command: ["python", "/app/train.py"]
+        resources:
+          limits:
+            cpu: "{{cpu_limit}}"
+            memory: "{{memory_limit}}"
+          volumeMounts:
+          - name: model-storage
+            mountPath: /app/model_output
+      restartPolicy: Never
+      volumes:
+      - name: model-storage
+        emptyDir: {}

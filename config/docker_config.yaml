@@ -1,0 +1,13 @@
+images:
+  horovod_training:
+    name: "gcr.io/dra-dml/ray-training"
+    tag: "v1"
+    dockerfile: "docker/training.Dockerfile"
+  rl_agent:
+    name: "gcr.io/dra-dml/rl-agent"
+    tag: "v1"
+    dockerfile: "docker/rl_agent.Dockerfile"
+  predictive_scaling:
+    name: "gcr.io/dra-dml/predictive-scaling"
+    tag: "v1"
+    dockerfile: "docker/predictive_scaling.Dockerfile"

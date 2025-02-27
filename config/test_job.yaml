@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cpu-intensive-job
+  namespace: training
+spec:
+  template:
+    spec:
+      containers:
+      - name: stress
+        image: polinux/stress
+        command: ["stress", "--cpu", "4", "--timeout", "600s"]
+      restartPolicy: Never

@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: monitoring-prometheus
+  namespace: monitoring
+spec:
+  serviceAccountName: prometheus
+  serviceMonitorSelector: {}
+  resources:
+    requests:
+      memory: 400Mi
+  scrapeConfigs:
+    - job_name: "kubernetes-jobs"
+      static_configs:
+        - targets: ["kubernetes.default.svc.cluster.local"]
+    - job_name: "kubernetes-cluster"
+      static_configs:
+        - targets: ["node-exporter.default.svc.cluster.local"]
+    - job_name: "kubernetes-pods"
+      kubernetes_sd_configs:
+        - role: pod
