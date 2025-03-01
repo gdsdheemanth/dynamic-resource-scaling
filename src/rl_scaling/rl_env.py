@@ -4,59 +4,47 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from gymnasium import spaces
 
 class KubernetesScalingEnv(MultiAgentEnv):
-    """Multi-Agent Kubernetes Scaling Environment for RLlib"""
-
-    def __init__(self, config=None):
-        super().__init__()
-
-        # Max number of pods allowed in the cluster
-        self.max_pods = config.get("max_pods", 4) if config else 4  
-
-        # Observation space: Simulated metrics (CPU, Memory, Network, Requests, Load)
+    def __init__(self, config):
+        self.max_pods = config.get("max_pods", 10)
         self.observation_space = spaces.Box(low=0, high=1, shape=(5,), dtype=np.float32)
-
-        # Action space: 0 = scale down, 1 = maintain, 2 = scale up
-        self.action_space = spaces.Discrete(3)
-
-        # Initial pod count
+        self.action_space = spaces.Discrete(3)  # 0: Scale Down, 1: Scale Up, 2: Do Nothing
         self.current_pods = 1
-        self.time_step = 0
-        self.max_steps = 100  # Max steps per episode
+        self.episode_length = 50  # Max steps per episode
+        self.steps = 0  # Step counter
 
     def reset(self, *, seed=None, options=None):
-        """Resets the environment state"""
-        super().reset(seed=seed)
-        
-        self.current_pods = 1  # Reset pods to minimum
-        self.time_step = 0  # Reset step counter
-        
-        obs = {"agent_0": np.random.rand(5)}  # Random initial observation
-        info = {}
-
-        return obs, info
+        """Resets the environment and returns the initial observation."""
+        self.current_pods = 1
+        self.steps = 0
+        obs = {"agent_0": np.random.rand(5)}
+        infos = {"agent_0": {}}
+        return obs, infos
 
     def step(self, action_dict):
-        """Executes an action and returns the next state, reward, and done signal"""
-
-        action = action_dict.get("agent_0", 1)  # Default to maintain if action is missing
+        """Performs an action and updates the environment state."""
+        action = action_dict["agent_0"]
         reward = 0
 
-        # Scale up/down logic
-        if action == 0 and self.current_pods > 1:
-            self.current_pods -= 1  # Scale down
-            reward = 1  # Reward for reducing resources
-        elif action == 2 and self.current_pods < self.max_pods:
-            self.current_pods += 1  # Scale up
-            reward = -1  # Penalize resource overuse
+        # Perform Scaling Action
+        if action == 0 and self.current_pods > 1:  # Scale Down
+            self.current_pods -= 1
+            reward = 2  # Encourage cost savings
+        elif action == 1 and self.current_pods < self.max_pods:  # Scale Up
+            self.current_pods += 1
+            reward = -1  # Penalize cost increase
 
-        # Simulate new observations
+        # Simulated CPU Utilization
+        cpu_utilization = np.random.uniform(0.2, 0.9)
+        if cpu_utilization > 0.8:
+            reward -= 2  # Penalize high CPU load
+
+        # Update Environment
         obs = {"agent_0": np.random.rand(5)}
+        rewards = {"agent_0": reward}
 
-        # Update step count and check if episode should end
-        self.time_step += 1
-        done = {"agent_0": self.time_step >= self.max_steps, "__all__": self.time_step >= self.max_steps}
+        self.steps += 1
+        terminateds = {"agent_0": self.steps >= self.episode_length, "__all__": self.steps >= self.episode_length}
+        truncateds = {"agent_0": False, "__all__": False}  # No early truncation
+        infos = {"agent_0": {}}
 
-        # Empty info dictionary (can be used for debugging metrics)
-        info = {}
-
-        return obs, {"agent_0": reward}, done, info
+        return obs, rewards, terminateds, truncateds, infos
