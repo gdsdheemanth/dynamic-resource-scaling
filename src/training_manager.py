@@ -3,8 +3,8 @@ import subprocess
 from job_template import load_yaml_template, save_yaml_file
 
 # Configurations
-TEMPLATE_PATH = "config/horovod_job_template.yaml"
-OUTPUT_PATH = "generated_horovod_job.yaml"
+TEMPLATE_PATH = "config/ray_job_template.yaml"
+OUTPUT_PATH = "generated_ray_job.yaml"
 
 def delete_existing_job(job_name, namespace="training"):
     """Delete an existing Kubernetes job before reapplying it."""
@@ -38,9 +38,9 @@ def submit_training_job(job_name, docker_image, num_workers, cpu_limit, memory_l
 # Example usage
 if __name__ == "__main__":
     submit_training_job(
-        job_name="horovod-training",
-        docker_image="gcr.io/dra-dml/horovod-training",
+        job_name="ray-training",
+        docker_image="gcr.io/dra-dml/ray-training",
         num_workers=1,
-        cpu_limit="1",
+        cpu_limit="2",
         memory_limit="4Gi"
     )

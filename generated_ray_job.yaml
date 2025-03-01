@@ -1,26 +1,23 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: horovod-training
+  name: ray-training
   namespace: training
 spec:
   completions: 1
+  parallelism: 1
   template:
     spec:
       containers:
       - command:
-        - horovodrun
-        - -np
-        - '1'
-        - -H
-        - localhost:1
         - python
         - /app/train.py
-        image: gcr.io/dra-dml/horovod-training:v1
-        name: horovod-worker
+        image: gcr.io/dra-dml/ray-training:v1
+        imagePullPolicy: Always
+        name: ray-worker
         resources:
           limits:
-            cpu: '1'
+            cpu: '2'
             memory: 4Gi
         volumeMounts:
         - mountPath: /app/model_output

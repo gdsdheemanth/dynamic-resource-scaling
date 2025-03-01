@@ -5,8 +5,11 @@
 #     --num-nodes=3 --region=us-central1 \
 #     --enable-autoscaling --min-nodes=1 --max-nodes=5
 
+# gcloud container clusters create "ml-cluster" \
+#     --num-nodes=2 --machine-type=e2-standard-4 --zone=us-central1-a
 gcloud container clusters create "ml-cluster" \
-    --num-nodes=2 --machine-type=e2-standard-4 --zone=us-central1-a
+    --num-nodes=2 --machine-type=n2-standard-4 --zone=us-central1-a \
+    --service-account=278701611056-compute@developer.gserviceaccount.com
 
 # Get credentials
 gcloud container clusters get-credentials "ml-cluster" --zone=us-central1-a

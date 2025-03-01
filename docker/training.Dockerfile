@@ -2,7 +2,7 @@
 FROM rayproject/ray:latest
 
 # Install additional dependencies
-RUN pip install tensorflow numpy pandas scikit-learn cloudpickle kubernetes
+RUN pip install tensorflow numpy pandas scikit-learn cloudpickle kubernetes gcsfs google-cloud-storage
 
 # Set the working directory
 WORKDIR /app

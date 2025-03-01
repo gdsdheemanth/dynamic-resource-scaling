@@ -5,20 +5,21 @@ metadata:
   namespace: training
 spec:
   completions: 1
-  parallelism: 2
+  parallelism: 1
   template:
     spec:
       containers:
       - name: ray-worker
         image: gcr.io/dra-dml/ray-training:v1
+        imagePullPolicy: Always
         command: ["python", "/app/train.py"]
         resources:
           limits:
             cpu: "{{cpu_limit}}"
             memory: "{{memory_limit}}"
-          volumeMounts:
-          - name: model-storage
-            mountPath: /app/model_output
+        volumeMounts:
+        - name: model-storage
+          mountPath: /app/model_output
       restartPolicy: Never
       volumes:
       - name: model-storage

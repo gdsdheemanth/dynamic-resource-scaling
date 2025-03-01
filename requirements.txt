@@ -1,12 +1,11 @@
 numpy
 pandas
 matplotlib
-# torch
-# torchvision
 stable-baselines3
 kubernetes
 gym
 tensorflow
+tensorflow-probability
 prometheus-client
 pytest
 matplotlib
@@ -15,4 +14,3 @@ ray[rllib]
 prometheus-api-client
 google-cloud-bigquery
 google-cloud-storage
-horovod

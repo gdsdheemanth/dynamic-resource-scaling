@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rl-training
+  namespace: training
+spec:
+  template:
+    spec:
+      containers:
+      - name: rl-trainer
+        image: gcr.io/dra-dml/rl_training:v1
+        imagePullPolicy: Always
+        command: ["python", "/app/src/rl_scaling/rl_trainer.py"]
+        resources:
+          limits:
+            cpu: "2"
+            memory: "8Gi"
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      restartPolicy: Never

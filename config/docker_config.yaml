@@ -3,6 +3,10 @@ images:
     name: "gcr.io/dra-dml/ray-training"
     tag: "v1"
     dockerfile: "docker/training.Dockerfile"
+  rl_training:
+    name: "gcr.io/dra-dml/rl_training"
+    tag: "v1"
+    dockerfile: "docker/rl_training.Dockerfile"
   rl_agent:
     name: "gcr.io/dra-dml/rl-agent"
     tag: "v1"
